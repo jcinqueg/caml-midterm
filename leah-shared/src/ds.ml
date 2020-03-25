@@ -1,3 +1,8 @@
+(*
+@authors: Leah Mitelberg, John Cinquegrana
+@pledge: I pledge my honor that I have abided by the Stevens Honor System.
+*)
+
 
 (* This file defines expressed values and environments *)
 
@@ -65,10 +70,9 @@ let extend_env : string -> exp_val -> env ea_result =
     Ok (ExtendEnv(id,v,env))
 
 
-
-(* let extend_env_rec : string -> string -> Ast.expr -> env ea_result =
- *   fun id par body env  ->
- *     Ok (ExtendEnvRec(id,par,body,env)) *)
+let extend_env_rec : Ast.decs -> env ea_result =
+   fun decs_list env  ->
+     Ok (ExtendEnvRec(decs_list,env))
 
 
 let rec apply_env : string -> exp_val ea_result =
@@ -79,10 +83,20 @@ let rec apply_env : string -> exp_val ea_result =
     if id=v
     then Ok ev
     else apply_env id tail
-  | ExtendEnvRec(v,par,body,tail) ->
+  | ExtendEnvRec( decs_list, tail ) ->
+    let rec find_func = function
+      | (v,par,body)::dec_tail ->
+        if id=v
+        then Ok (ProcVal (par,body,env))
+        else find_func dec_tail
+      | _ -> (*Empty Case*)
+        apply_env id tail
+    in
+    find_func decs_list
+  (*| ExtendEnvRec(v,par,body,tail) ->
     if id=v
     then Ok (ProcVal (par,body,env))
-    else apply_env id tail
+    else apply_env id tail*)
       
 let lookup_env : env ea_result =
   fun env ->

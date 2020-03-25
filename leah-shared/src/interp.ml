@@ -1,3 +1,8 @@
+(*
+@authors: Leah Mitelberg, John Cinquegrana
+@pledge: I pledge my honor that I have abided by the Stevens Honor System.
+*)
+
 open Ast
 open Ds
 
@@ -76,7 +81,9 @@ and
     eval_expr e2 >>= fun v2 ->
     apply_proc v1 v2
   | Letrec(decs, e2) ->
-    error "implement"
+    (*My written code *)
+    extend_env_rec decs >>+
+    eval_expr e2
   | Record(fs) ->
     mapM (fun (_,e) -> eval_expr e) fs >>= fun vs ->
     return @@ RecordVal (List.map2 (fun (id,_) v -> (id,v)) fs vs) 
