@@ -111,9 +111,40 @@ and
     sequence (List.map process_field fs) >>= fun evs ->
     return (RecordVal (addIds fs evs))
   | Proj(e,id) ->
-    error "update"
+    (*e is a recordval, get the id out of it*)
+    eval_expr e >>=
+    fields_of_recordVal >>= fun ls -> (* string*(bool*exp_val) list *)
+    begin
+    match List.assoc_opt id ls with
+    | None -> error "not found"
+    | Some (mut, ev) -> begin
+        if( mut ) then
+          int_of_refVal ev >>= fun l ->
+          (match Store.deref g_store l with
+            | None -> error "index out of bounds"
+            | Some ev -> return ev)
+        else
+          return ev
+      end
+    end
   | SetField(e1,id,e2) ->
-    error "implement"
+    (*e1 is a recordval, attempt to update id to be e2 *)
+    eval_expr e1 >>= fun cord ->
+    eval_expr e2 >>= fun newval ->
+    fields_of_recordVal cord >>= fun ls -> (* string*(bool*exp_val) list *)
+    begin
+    match List.assoc_opt id ls with
+    | None -> error "not found"
+    | Some (mut, ev) -> begin
+        if( mut ) then
+          int_of_refVal ev >>= fun l ->
+          (match Store.set_ref g_store l newval with
+            | None -> error "index out of bounds"
+            | Some _ -> return UnitVal)
+        else
+          error "Field is not mutable"
+      end
+    end
   | Unit -> return UnitVal
   | Debug(_e) ->
     string_of_env >>= fun str_env ->

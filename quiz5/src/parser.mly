@@ -66,8 +66,8 @@ open Ast
    Because PLUS has higher precedence than IN, "let x=1 in x+2" will
    parse as "let x=1 in (x+2)" and not as "(let x=1 in x)+2". *)
 
-%nonassoc IN ELSE EQUALS            /* lowest precedence */
-%left PLUS MINUS EQUALSMUTABLE
+%nonassoc IN ELSE EQUALS EQUALSMUTABLE           /* lowest precedence */
+%left PLUS MINUS
 %left TIMES DIVIDED   
 %left DOT    /* highest precedence */
 
