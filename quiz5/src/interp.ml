@@ -142,7 +142,7 @@ and
             | None -> error "index out of bounds"
             | Some _ -> return UnitVal)
         else
-          error "Field is not mutable"
+          error "Field not mutable"
       end
     end
   | Unit -> return UnitVal
