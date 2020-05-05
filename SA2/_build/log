@@ -1,0 +1,31 @@
+# dune utop
+# OCAMLPARAM: unset
+$ /usr/bin/nproc > /tmp/dune18a5f9.output 2> /dev/null
+$ /usr/bin/ocamlc.opt -config > /tmp/dunea54bd0.output
+$ (cd _build/default && /usr/bin/ocamldep.opt -modules -impl src/interp.ml) > _build/default/src/.sool.objs/interp.ml.d
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -bin-annot -I src/.sool.objs -I src/.sool.objs/.private -no-alias-deps -opaque -open Sool -o src/.sool.objs/sool__Interp.cmo -c -impl src/interp.ml)
+> File "src/interp.ml", line 190, characters 25-31:
+> Warning 8: this pattern-matching is not exhaustive.
+> Here is an example of a case that is not matched:
+> None
+> File "src/interp.ml", line 68, characters 4-5:
+> Warning 11: this match case is unused.
+> File "src/interp.ml", line 84, characters 27-33:
+> Warning 27: unused variable c_name.
+> File "src/interp.ml", line 84, characters 34-40:
+> Warning 27: unused variable m_name.
+> File "src/interp.ml", line 84, characters 41-46:
+> Warning 27: unused variable c_env.
+> File "src/interp.ml", line 225, characters 9-10:
+> Warning 27: unused variable e.
+> File "src/interp.ml", line 225, characters 11-17:
+> Warning 27: unused variable m_name.
+> File "src/interp.ml", line 225, characters 18-20:
+> Warning 27: unused variable es.
+> File "src/interp.ml", line 229, characters 10-16:
+> Warning 27: unused variable m_name.
+> File "src/interp.ml", line 229, characters 17-19:
+> Warning 27: unused variable es.
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -a -o src/sool.cma src/.sool.objs/sool.cmo src/.sool.objs/sool__Store.cmo src/.sool.objs/sool__Ast.cmo src/.sool.objs/sool__Parser.cmo src/.sool.objs/sool__Lexer.cmo src/.sool.objs/sool__Ds.cmo src/.sool.objs/sool__Interp.cmo)
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs -w -24 -g -bin-annot -I src/.utop -I /home/cs496/.opam/system/lib/bytes -I /home/cs496/.opam/system/lib/camomile -I /home/cs496/.opam/system/lib/camomile/default_config -I /home/cs496/.opam/system/lib/camomile/dyn -I /home/cs496/.opam/system/lib/camomile/lib_default -I /home/cs496/.opam/system/lib/camomile/library -I /home/cs496/.opam/system/lib/findlib -I /home/cs496/.opam/system/lib/lambda-term -I /home/cs496/.opam/system/lib/lwt -I /home/cs496/.opam/system/lib/lwt/unix -I /home/cs496/.opam/system/lib/lwt_log -I /home/cs496/.opam/system/lib/lwt_log/core -I /home/cs496/.opam/system/lib/lwt_react -I /home/cs496/.opam/system/lib/react -I /home/cs496/.opam/system/lib/result -I /home/cs496/.opam/system/lib/utop -I /home/cs496/.opam/system/lib/zed -I /usr/lib/ocaml/compiler-libs -I /usr/lib/ocaml/threads -I src/.sool.objs -no-alias-deps -o src/.utop/utop.cmo -c -impl src/.utop/utop.ml)
+$ (cd _build/default && /usr/bin/ocamlc.opt -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs -w -24 -g -o src/.utop/utop.exe -custom -linkall -warn-error -31 -I /home/cs496/.opam/system/lib/bytes -I /home/cs496/.opam/system/lib/camomile -I /home/cs496/.opam/system/lib/camomile/default_config -I /home/cs496/.opam/system/lib/camomile/dyn -I /home/cs496/.opam/system/lib/camomile/lib_default -I /home/cs496/.opam/system/lib/camomile/library -I /home/cs496/.opam/system/lib/findlib -I /home/cs496/.opam/system/lib/lambda-term -I /home/cs496/.opam/system/lib/lwt -I /home/cs496/.opam/system/lib/lwt/unix -I /home/cs496/.opam/system/lib/lwt_log -I /home/cs496/.opam/system/lib/lwt_log/core -I /home/cs496/.opam/system/lib/lwt_react -I /home/cs496/.opam/system/lib/react -I /home/cs496/.opam/system/lib/result -I /home/cs496/.opam/system/lib/utop -I /home/cs496/.opam/system/lib/zed -I /usr/lib/ocaml/compiler-libs -I /usr/lib/ocaml/threads -I src /usr/lib/ocaml/compiler-libs/ocamlcommon.cma /usr/lib/ocaml/compiler-libs/ocamlbytecomp.cma /usr/lib/ocaml/compiler-libs/ocamltoplevel.cma /home/cs496/.opam/system/lib/findlib/findlib.cma /home/cs496/.opam/system/lib/findlib/findlib_top.cma /home/cs496/.opam/system/lib/result/result.cma /home/cs496/.opam/system/lib/lwt/lwt.cma /usr/lib/ocaml/unix.cma /usr/lib/ocaml/bigarray.cma /usr/lib/ocaml/threads/threads.cma /home/cs496/.opam/system/lib/lwt/unix/lwt_unix.cma /home/cs496/.opam/system/lib/lwt_log/core/lwt_log_core.cma /home/cs496/.opam/system/lib/lwt_log/lwt_log.cma /home/cs496/.opam/system/lib/react/react.cma /home/cs496/.opam/system/lib/lwt_react/lwt_react.cma /home/cs496/.opam/system/lib/camomile/default_config/camomileDefaultConfig.cma /home/cs496/.opam/system/lib/camomile/library/camomileLibrary.cma /home/cs496/.opam/system/lib/camomile/lib_default/camomileLibraryDefault.cma /home/cs496/.opam/system/lib/camomile/dyn/camomileLibraryDyn.cma /home/cs496/.opam/system/lib/camomile/camomile_yuge.cma /home/cs496/.opam/system/lib/zed/zed.cma /home/cs496/.opam/system/lib/lambda-term/lambda_term.cma /home/cs496/.opam/system/lib/utop/uTop.cma src/sool.cma src/.utop/utop.cmo)
