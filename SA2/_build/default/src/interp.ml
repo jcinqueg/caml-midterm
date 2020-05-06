@@ -67,18 +67,8 @@ let fields_of_class_decl : class_decl -> string list ea_result = function
   | (_, fields, _) -> return fields
   | _ -> error "Error: expected class_decl"
     
-let rec append_env: env -> env -> env = fun bottom top ->
-  match top with
-  | ExtendEnv(a, b, mid) -> ExtendEnv(a, b, append_env bottom mid)
-  | EmptyEnv -> bottom
-
-let rec autobox: string list -> env = function
-  | h::t ->
-    append_env (ExtendEnv(h, RefVal(Store.new_ref g_store (NumVal 0)), EmptyEnv)) @@ autobox t
-  | [] -> EmptyEnv
-
 let new_env : string list -> env ea_result  = fun fs ->
-  return @@ autobox fs
+  return @@ List.fold_left (fun en str -> (ExtendEnv(str, RefVal(Store.new_ref g_store (NumVal 0)), en))) EmptyEnv fs
 
 let slice fs env =
   let rec slice' fs acc env =
