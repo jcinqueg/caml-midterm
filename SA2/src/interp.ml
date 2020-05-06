@@ -82,7 +82,12 @@ let slice fs env =
     
 let lookup_method : string -> string -> class_env ->
   method_decl option = fun c_name m_name c_env ->
-  failwith "implement"
+  match run @@ lookup_class c_name c_env with
+  | Ok (_,_,m_env) -> begin
+    try Some(List.assoc m_name m_env)
+    with Not_found -> None
+    end
+  | _ -> None
 
 (* Helper function for records *)
 let rec addIds fs evs =
@@ -223,11 +228,24 @@ and
     with Not_found -> return @@ ObjectVal(c_name,en)
     end (*step 4*)
   | Send(e,m_name,es) ->
-    error "implement"
+    eval_expr e >>= fun self ->
+    obj_of_objectVal self >>= fun (c_name, _) -> (*step 1*)
+    sequence (List.map eval_expr es) >>= fun args -> begin(*step 2*)
+    match lookup_method c_name m_name !g_class_env with
+      | None -> error "Method not found"
+      | Some m -> apply_method m_name self args m
+    end
   | Self ->
     eval_expr (Var "_self")
   | Super(m_name,es) ->
-    error "implement"
+    sequence (List.map eval_expr es) >>= fun args -> (*step 1*)
+    eval_expr (Var "_super") >>=
+    string_of_stringVal >>= fun c_name -> (*step 2*)
+    eval_expr (Var "_self") >>= fun self ->begin(*step 3*)
+    match lookup_method c_name m_name !g_class_env with
+      | None -> error "Method not found"
+      | Some m -> apply_method m_name self args m
+    end
       
   (* List operations* *)
   | List(es) ->
