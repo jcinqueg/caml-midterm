@@ -1,0 +1,14 @@
+class c1 extends object {
+ field x
+ field y
+ method initialize () {
+  begin
+   set x = 11;
+   set y = 12
+end }
+method m1 () { x +y }
+}
+
+let o = new c1()
+in 5
+
