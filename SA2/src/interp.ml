@@ -1,3 +1,5 @@
+(*I do no cheaties*)
+
 open Ast
 open Ds
 
@@ -83,10 +85,7 @@ let slice fs env =
 let lookup_method : string -> string -> class_env ->
   method_decl option = fun c_name m_name c_env ->
   match run @@ lookup_class c_name c_env with
-  | Ok (_,_,m_env) -> begin
-    try Some(List.assoc m_name m_env)
-    with Not_found -> None
-    end
+  | Ok (_,_,m_env) -> List.assoc_opt m_name m_env
   | _ -> None
 
 (* Helper function for records *)

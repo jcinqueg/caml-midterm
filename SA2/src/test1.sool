@@ -6,10 +6,20 @@ class c1 extends object {
    set x = 11;
    set y = 12
 end }
-method m1 () { x +y }
-method m2 () {  send self m3() }
+method m1 () { x+y }
+method m2 () { x-y }
 }
 
-let o = new c1()
-in debug(o)
+class c2 extends c1 {
+ field y
+ method initialize () {
+  begin
+   super initialize();
+   set y = 22
+end }
+method m3 () { y + (send self m1() )}
+}
+
+let o = new c2()
+in send o m3()
 

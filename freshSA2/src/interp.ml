@@ -60,26 +60,10 @@ let initialize_class_env cs =
      initialize_class_env' cs cs
 
 let lookup_class : string -> class_env -> class_decl ea_result  = fun c_name c_env ->
-  try return @@ List.assoc c_name c_env
-  with Not_found -> error @@ "lookup_class: class "^c_name^" not found"
-
-let fields_of_class_decl : class_decl -> string list ea_result = function
-  | (_, fields, _) -> return fields
-  | _ -> error "Error: expected class_decl"
-
-let rec append_env: env -> env -> env = fun bottom top ->
-  match top with
-  | ExtendEnv(a, b, mid) -> ExtendEnv(a, b, append_env bottom mid)
-  | EmptyEnv -> bottom
-
-let rec autobox: string list -> env = function
-  | h::t ->
-    append_env (ExtendEnv(h, RefVal(Store.new_ref g_store (NumVal 0)), EmptyEnv)) @@ autobox t
-  | [] -> EmptyEnv
-
-let new_env : string list -> env ea_result  = fun fs ->
-  return @@ autobox fs
-
+  error "implement"
+    
+let rec new_env : string list -> env ea_result  = fun fs ->
+  error "implement"
  
 let slice fs env =
   let rec slice' fs acc env =
@@ -93,12 +77,7 @@ let slice fs env =
     
 let lookup_method : string -> string -> class_env ->
   method_decl option = fun c_name m_name c_env ->
-  match run @@ lookup_class c_name c_env with
-  | Ok (_,_,m_env) -> begin
-    try Some(List.assoc m_name m_env)
-    with Not_found -> None
-    end
-  | _ -> None
+  failwith "implement"
 
 (* Helper function for records *)
 let rec addIds fs evs =
@@ -232,31 +211,13 @@ and
     
   (* SOOL operations *)
   | NewObject(c_name,es) ->
-    sequence (List.map eval_expr es) >>= fun args -> (*step 1*)
-    lookup_class c_name !g_class_env >>= fun (_, fields, methods) -> (*step 2*)
-    new_env fields >>= fun en -> begin (*step 3*)
-    try apply_method "initialize" (ObjectVal(c_name,en)) args (List.assoc "initialize" methods)
-    with Not_found -> return @@ ObjectVal(c_name,en)
-    end (*step 4*)
+    error "implement"
   | Send(e,m_name,es) ->
-    eval_expr e >>= fun self ->
-    obj_of_objectVal self >>= fun (c_name, _) -> (*step 1*)
-    sequence (List.map eval_expr es) >>= fun args -> begin(*step 2*)
-    match lookup_method c_name m_name !g_class_env with
-      | None -> error "Method not found"
-      | Some m -> apply_method m_name self args m
-    end
+    error "implement"
   | Self ->
     eval_expr (Var "_self")
   | Super(m_name,es) ->
-    sequence (List.map eval_expr es) >>= fun args -> (*step 1*)
-    eval_expr (Var "_super") >>=
-    string_of_stringVal >>= fun c_name -> (*step 2*)
-    eval_expr (Var "_self") >>= fun self ->begin(*step 3*)
-    match lookup_method c_name m_name !g_class_env with
-      | None -> error "Method not found"
-      | Some m -> apply_method m_name self args m
-    end
+    error "implement"
       
   (* List operations* *)
   | List(es) ->
