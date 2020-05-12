@@ -61,16 +61,30 @@ let initialize_class_env cs =
   in g_class_env := [];
      initialize_class_env' cs cs
 
-let lookup_class : string -> class_env -> class_decl ea_result  = fun c_name c_env ->
-  try return @@ List.assoc c_name c_env
-  with Not_found -> error @@ "lookup_class: class "^c_name^" not found"
 
 let fields_of_class_decl : class_decl -> string list ea_result = function
   | (_, fields, _) -> return fields
   | _ -> error "Error: expected class_decl"
     
-let new_env : string list -> env ea_result  = fun fs ->
-  return @@ List.fold_left (fun en str -> (ExtendEnv(str, RefVal(Store.new_ref g_store (NumVal 0)), en))) EmptyEnv fs
+let lookup_class : string -> class_env -> class_decl ea_result  = fun c_name c_env ->
+  match List.find_opt (fun (name,_) -> (compare name c_name)=0 ) c_env with
+  | None -> error @@ "lookup_class: class "^c_name^" not found"
+  | Some (_,c) -> return c
+
+    
+let rec new_env : string list -> env ea_result  = fun fs ->
+  match fs with
+  | h::t ->  extend_env h (RefVal(Store.new_ref g_store (NumVal 0))) >>+ new_env t
+  | [] -> lookup_env
+
+let lookup_method : string -> string -> class_env ->
+  method_decl option = fun c_name m_name c_env ->
+  match List.find_opt (fun (name,_) -> name = c_name) c_env with
+  | None -> None
+  | Some (_,(_,_,m_env)) -> 
+    (match List.find_opt (fun (name2,_) -> name2 = m_name) m_env with
+      | None -> None
+      | Some (_,m) -> Some m)
 
 let slice fs env =
   let rec slice' fs acc env =
@@ -82,11 +96,7 @@ let slice fs env =
   in
   return (slice' (List.rev fs) EmptyEnv env)
     
-let lookup_method : string -> string -> class_env ->
-  method_decl option = fun c_name m_name c_env ->
-  match run @@ lookup_class c_name c_env with
-  | Ok (_,_,m_env) -> List.assoc_opt m_name m_env
-  | _ -> None
+
 
 (* Helper function for records *)
 let rec addIds fs evs =
